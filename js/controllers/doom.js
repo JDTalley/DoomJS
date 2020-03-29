@@ -11,7 +11,8 @@ var keys = [];
 window.onkeyup = function(e) { keys[e.code] = false; pframe = true;}
 window.onkeydown = function(e) { keys[e.code] = true; }
 
-// Textures?
+// Textures
+canvas.loadImages();
 
 // Set up game variables
 const SPAWNS = ["TOP", "RIGHT", "BOTTOM", "LEFT"];
@@ -38,7 +39,6 @@ startGame();
 // Game Loop
 function gameTick() {
     if (newGame) {
-
         redrawCanvas();
         // Wait for next frame
         queueTick();
@@ -123,8 +123,10 @@ function pauseGame(bool) {
 function redrawCanvas() {
     canvas.setBackground("#000000");
 
-    canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);
-
+    if (canvas.imgLoaded == canvas.imgArr.length) {
+        canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);
+    }
+    
     // Draw the lives
     // canvas.drawLives(lives, spaceship);
 }
