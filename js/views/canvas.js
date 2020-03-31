@@ -11,23 +11,34 @@ function Canvas(id) {
     }
 
     this.loadImages = function() {
-        this.numImages = 1;
+        this.numImages = 2;
         this.imgLoaded = 0;
-        console.log(this.imgLoaded); 
+        // Img Vars
         var hudBack = new Image();
+        var pist = new Image();
         hudBack.onload = function() {
-            //const hudBackPat
+
         };
         this.imgLoaded++;
-        hudBack.onerror = function() {
-            console.log("error");
+        hudBack.onload = function() {
+
         }
+        this.imgLoaded++;
+        // Sources
         hudBack.src = 'js/views/textures/concretePat1.png';
+        pist.src = 'js/views/textures/PISGA0.png';
         this.imgArr.push(hudBack);
+        this.imgArr.push(pist);
     }
 
     this.drawEnemy = function() {
         console.log('Enemy');
+    }
+
+    this.drawGun = function(i) {
+        this.context.save();
+        this.context.drawImage(this.imgArr[1], 300, 350, 150, 150);
+        this.context.restore();
     }
 
     this.drawHUD = function(ammo, health, gunIndex, armor, ammoArray) {
@@ -36,10 +47,11 @@ function Canvas(id) {
         hudMedGradient.addColorStop(0, '#696969');
         hudMedGradient.addColorStop(.5, '#A9A9A9');
 
+        // Create Patterns
+        const hudPat = this.context.createPattern(this.imgArr[0], 'repeat');
 
         // Draw background
         //this.context.drawImage(this.imgArr[0], 0, 0);
-        const hudPat = this.context.createPattern(this.imgArr[0], 'repeat');
         this.context.fillStyle = hudPat;
         this.context.fillRect(0, 500, 800, 100);
 
@@ -118,6 +130,5 @@ function Canvas(id) {
         this.context.fillText("300", 790, 590);
 
         this.context.restore();
-
     }
 }

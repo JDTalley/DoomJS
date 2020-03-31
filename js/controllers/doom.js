@@ -124,7 +124,8 @@ function redrawCanvas() {
     canvas.setBackground("#000000");
 
     if (canvas.imgLoaded == canvas.imgArr.length) {
-        canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);
+        canvas.drawGun(gunIndex);
+        canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);   
     }
     
     // Draw the lives
