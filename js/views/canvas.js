@@ -31,13 +31,31 @@ function Canvas(id) {
         this.imgArr.push(pist);
     }
 
+    this.drawTestGrid = function() {
+        this.context.save();
+        this.context.strokeStyle = '#ff0000';
+        this.context.beginPath();
+        this.context.moveTo(this.width/2, 0);
+        this.context.lineTo(this.width/2, this.height);
+        this.context.stroke();
+        this.context.beginPath();
+        this.context.moveTo(0, this.height/2);
+        this.context.lineTo(this.width, this.height/2);
+        this.context.stroke();
+        this.context.restore();
+    }
+
+    this.drawWall = function(wall) {
+        
+    }
+
     this.drawEnemy = function() {
         console.log('Enemy');
     }
 
     this.drawGun = function(i) {
         this.context.save();
-        this.context.drawImage(this.imgArr[1], 300, 350, 150, 150);
+        this.context.drawImage(this.imgArr[i+1], (this.width/2)-90, 350, 150, 150);
         this.context.restore();
     }
 
@@ -49,15 +67,31 @@ function Canvas(id) {
 
         // Create Patterns
         const hudPat = this.context.createPattern(this.imgArr[0], 'repeat');
+        const hudHeight = (this.height)/6;
+        const hudHHLeft = (this.width/2) - hudHeight/2;
+        const hudHHRight = (this.width/2) + hudHeight/2;
 
         // Draw background
         //this.context.drawImage(this.imgArr[0], 0, 0);
         this.context.fillStyle = hudPat;
-        this.context.fillRect(0, 500, 800, 100);
+        this.context.fillRect(0, 5*hudHeight, this.width, hudHeight);
+
+        this.context.save();
+        this.context.globalAlpha = 0.4;
+        this.context.strokeStyle = 'black';
+        this.context.lineWidth = 4;
+        this.context.strokeRect(0, 5*hudHeight, (2*hudHHLeft)/6, hudHeight);
+        this.context.strokeRect((2*hudHHLeft)/6 + 2, 5*hudHeight, (2*hudHHLeft)/5, hudHeight);
+        this.context.strokeRect((22*hudHHLeft)/30 + 4, 5*hudHeight, (8*hudHHLeft)/30 - 4, hudHeight);
+        this.context.strokeRect(hudHHRight, 5*hudHeight, (2*hudHHLeft)/5, hudHeight);
+        this.context.strokeRect(hudHHRight + (2*hudHHLeft)/5 + 2, 5*hudHeight, (hudHHLeft)/10, hudHeight);
+        this.context.strokeRect(hudHHRight + hudHHLeft/2, 5*hudHeight, (hudHHLeft)/2, hudHeight);
+        this.context.globalAlpha - 1.0;
+        this.context.restore();
 
         // Face Background
         this.context.fillStyle = 'black';
-        this.context.fillRect(350, 500, 100, 100)
+        this.context.fillRect((this.width/2) - (hudHeight/2), 5*hudHeight, hudHeight, hudHeight)
 
         this.context.save();
 
@@ -72,13 +106,13 @@ function Canvas(id) {
         // Draw Ammo
         this.context.fillStyle = 'red';
         this.context.textAlign = 'right';
-        this.context.fillText(ammo, 105, 545);
+        this.context.fillText(ammo, 118, 545);
 
         // Draw Health
-        this.context.fillText(health + "%", 235, 545);
+        this.context.fillText(health + "%", 287, 545);
 
         // Draw Armor
-        this.context.fillText(armor + "%", 575, 545);
+        this.context.fillText(armor + "%", 670, 545);
 
         // Medium Grey Font
         this.context.shadowOffsetX = 2;
@@ -89,45 +123,45 @@ function Canvas(id) {
         this.context.textAlign = 'middle';
 
         // Draw "AMMO"
-        this.context.fillText("AMMO", 97, 590);
+        this.context.fillText("AMMO", 110, 590);
 
         // Draw "HEALTH"
-        this.context.fillText("HEALTH", 235, 590);
+        this.context.fillText("HEALTH", 285, 590);
 
         // Draw "ARMS"
-        this.context.fillText("ARMS", 340, 590);
+        this.context.fillText("ARMS", 413, 590);
 
         // Draw "ARMOR"
-        this.context.fillText("ARMOR", 565, 590);
+        this.context.fillText("ARMOR", 660, 590);
 
         // Small Grey Font
         this.context.font = '400 18px Orbitron';
         this.context.fillStyle = '#A9A9A9';
 
         // Draw Ammo Descriptions
-        this.context.fillText("BULL", 655, 530);
-        this.context.fillText("SHEL", 655, 550);
-        this.context.fillText("RCKT", 655, 570);
-        this.context.fillText("CELL", 655, 590);
+        this.context.fillText("BULL", 820, 530);
+        this.context.fillText("SHEL", 820, 550);
+        this.context.fillText("RCKT", 820, 570);
+        this.context.fillText("CELL", 820, 590);
 
         // Draw "/"
-        this.context.fillText("/", 735, 530);
-        this.context.fillText("/", 735, 550);
-        this.context.fillText("/", 735, 570);
-        this.context.fillText("/", 735, 590);
+        this.context.fillText("/", 892, 530);
+        this.context.fillText("/", 892, 550);
+        this.context.fillText("/", 892, 570);
+        this.context.fillText("/", 892, 590);
 
         // Draw ammoAll
         this.context.textAlign = 'right'
         this.context.fillStyle = 'gold';
-        this.context.fillText(ammoArray[0], 720, 530);
-        this.context.fillText(ammoArray[1], 720, 550);
-        this.context.fillText(ammoArray[2], 720, 570);
-        this.context.fillText(ammoArray[3], 720, 590);
+        this.context.fillText(ammoArray[0], 875, 530);
+        this.context.fillText(ammoArray[1], 875, 550);
+        this.context.fillText(ammoArray[2], 875, 570);
+        this.context.fillText(ammoArray[3], 875, 590);
 
-        this.context.fillText("200", 790, 530);
-        this.context.fillText("50", 790, 550);
-        this.context.fillText("50", 790, 570);
-        this.context.fillText("300", 790, 590);
+        this.context.fillText("200", 945, 530);
+        this.context.fillText("50", 945, 550);
+        this.context.fillText("50", 945, 570);
+        this.context.fillText("300", 945, 590);
 
         this.context.restore();
     }
