@@ -1,12 +1,11 @@
 class Entity {
-    constructor(x, y, dx, dy, orientation, jerk) {
+    constructor(x, y, dx, dy, orientation, jerk, fov) {
         this.x = x;
         this.y = y;
         this.dx = dx;
         this.dy = dy;
         this.jerk = jerk;
         this.orientation = orientation;
-        this.color = "#000000";
         this.maxD = 5;
     }
 
@@ -100,6 +99,16 @@ class Entity {
     mathifyOrientation() {
         // Convert to degrees, then convert to radians.
         return (90 - this.orientation) * (Math.PI / 180);
+    }
+
+    // vectorFOV returns an array with 2 vectors
+    // v0 is the left edge of the FOV while v1 is the right edge
+    // Probably needs to be moved to player class or main
+    vectorFOV() {
+        let v0 = Math.tan((90 - (this.orientation - (this.fov/2))) * (Math.PI / 180));
+        let v1 = Math.tan((90 - (this.orientation + (this.fov/2))) * (Math.PI / 180));
+
+        return [v0, v1];
     }
 
     // Positive rotates right, Negative rotates left

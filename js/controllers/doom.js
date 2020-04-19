@@ -2,9 +2,6 @@
 var canvas = new Canvas("game-canvas");
 var width = canvas.width;
 var height = canvas.height;
-if(!localStorage.getItem('high')) {
-    localStorage.setItem('high', 0);
-}
 
 // Set up input
 var keys = [];
@@ -21,6 +18,8 @@ var newGame = true;
 var pframe = true;
 var frame;
 var lives;
+var player = new Entity(0, 0, 0, 0, 0, 10, 90);
+var level = level1;
 var health = 100;
 var armor = 100;
 // Array of ammo.
@@ -128,6 +127,23 @@ function redrawCanvas() {
         canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);   
     }
     
-    // Draw the lives
-    // canvas.drawLives(lives, spaceship);
+    drawWalls(level.walls);
+
+    //canvas.drawTestGrid();
+}
+
+// Initalize Level
+function levelInit(level) {
+    player.setX(level.start.x);
+    player.setY(level.start.y);
+    player.setO(level.o);
+}
+
+function drawWalls(wallArr) {
+    for (let i = 0; i < 90; i++) {
+        
+    }
+    for (let i = 0; i < wallArr.length; i++) {
+        canvas.drawWall(wallArr[i]);
+    }
 }
