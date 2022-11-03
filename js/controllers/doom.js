@@ -1,44 +1,46 @@
 // Set up scene
-var canvas = new Canvas("game-canvas");
-var width = canvas.width;
-var height = canvas.height;
+const uiCanvas = new UICanvas("game-canvas");
+const width = uiCanvas.width;
+const height = uiCanvas.height;
+
+// Set up Map
+const mapCanvas = new MapCanvas("map-canvas");
 
 // Set up input
-var keys = [];
+const keys = [];
 window.onkeyup = function(e) { keys[e.code] = false; pframe = true;}
 window.onkeydown = function(e) { keys[e.code] = true; }
 
 // Textures
-canvas.loadImages();
+uiCanvas.loadImages();
 
 // Set up game variables
 const SPAWNS = ["TOP", "RIGHT", "BOTTOM", "LEFT"];
-var paused = true;
-var newGame = true;
-var pframe = true;
-var frame;
-var lives;
-var player = new Entity(0, 0, 0, 0, 0, 10, 90);
-var level = level1;
-var health = 100;
-var armor = 100;
+let paused = true;
+let newGame = true;
+let pframe = true;
+let frame;
+let lives;
+let player = new Player(500,500, 0, 0, 0, 10);
+let level = level1;
+let health = 100;
+let armor = 100;
 // Array of ammo.
 // 0 Bullets, 1 Shells, 2 Rockets, 3 Cells
-var ammo = [200, 0, 0, 0];
+let ammo = [200, 0, 0, 0];
 // Selected Gun
-var gunIndex = 0;
+let gunIndex = 0;
 
-var GAME_FPS = 60;
-var msBetweenFrames = 1000 / GAME_FPS;
+const GAME_FPS = 60;
+const msBetweenFrames = 1000 / GAME_FPS;
 
 // Start Game
-// reset();
 startGame();
 
 // Game Loop
 function gameTick() {
     if (newGame) {
-        redrawCanvas();
+        redrawuiCanvas();
         // Wait for next frame
         queueTick();
 
@@ -50,38 +52,13 @@ function gameTick() {
             frame = 1;
         }
 
-        // Check for input
-        // Rotation
-        // if(keys["KeyA"] || keys["ArrowLeft"]) {
-        //     spaceship.rotate(-5);
-        // }
-        // if(keys["KeyD"] || keys["ArrowRight"]) {
-        //     spaceship.rotate(5);
-        // }
-
-        // Acceleration / Deceleration
-        // if(keys["KeyW"] || keys["ArrowUp"]) {
-        //     spaceship.accelerate();
-        // }
-        // if(keys["KeyS"] || keys["ArrowDown"]) {
-        //     spaceship.decelerate();
-        // }
-
         // Pause
         if(pframe && (keys["Enter"] || keys["KeyP"])) {
             pauseGame(true);
         }
 
-        // Shooting
-        // if (keys["Space"]) {
-        //     if (frame % 15 == 0) {
-        //         bullets.push(spaceship.shoot(frame));
-        //         sPew.play();
-        //     };
-        // }
-
         // Draw Scene
-        redrawCanvas();
+        redrawuiCanvas();
 
         // Wait for next frame
         queueTick();
@@ -99,6 +76,7 @@ function gameTick() {
 
 // Run Game
 function startGame() {
+    levelInit(level1);
     queueTick();
 }
 // Wait for next frame
@@ -119,31 +97,67 @@ function pauseGame(bool) {
 }
 
 // Draw Scene
-function redrawCanvas() {
-    canvas.setBackground("#000000");
+function redrawuiCanvas() {
+    uiCanvas.setBackground("#000000");
+    mapCanvas.drawBackground("#000");
 
-    if (canvas.imgLoaded == canvas.imgArr.length) {
-        canvas.drawGun(gunIndex);
-        canvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);   
+    if (uiCanvas.imgLoaded == uiCanvas.imgArr.length) {
+        uiCanvas.drawGun(gunIndex);
+        uiCanvas.drawHUD(ammo[gunIndex], health, gunIndex, armor, ammo);   
     }
-    
-    drawWalls(level.walls);
 
-    //canvas.drawTestGrid();
+    let pos = worldToLocalCoords(player.pos);
+    mapCanvas.drawRay(pos);
+
+    level.bounds.forEach(bound => {
+        // Draw Boundary on Map
+        const startPos = worldToLocalCoords(bound.p1);
+        const endPos = worldToLocalCoords(bound.p2);
+
+        mapCanvas.drawLine(startPos, endPos, '#FF0000');
+    })
+
+    player.rays.forEach(ray => {
+        let smallestRayLength = 100000;
+        let smallestRay;
+
+        level.bounds.forEach(bound => {
+            let newRay = ray.cast(bound);
+            //console.log(lineLength(player.pos, newRay), smallestRay);
+
+            let newRayLength = lineLength(player.pos, newRay);
+            //console.log(ray, bound, newRayLength, smallestRayLength)
+
+            if (newRayLength < smallestRayLength) {
+                smallestRayLength = newRayLength;
+                smallestRay = newRay;
+            }
+        });
+
+        smallestRay = worldToLocalCoords(smallestRay);
+        mapCanvas.drawLine(pos, smallestRay, '#fff');
+    });
+
+    //let ray = player.rays[0].cast(level.bounds[0]);
+    //ray = worldToLocalCoords(ray);
+    //mapCanvas.drawLine(pos, ray, '#FFF');
 }
 
 // Initalize Level
 function levelInit(level) {
-    player.setX(level.start.x);
-    player.setY(level.start.y);
+    player.pos.x = (level.start.x);
+    player.pos.y = (level.start.y);
     player.setO(level.o);
+    player.addRay();
 }
 
-function drawWalls(wallArr) {
-    for (let i = 0; i < 90; i++) {
-        
-    }
-    for (let i = 0; i < wallArr.length; i++) {
-        canvas.drawWall(wallArr[i]);
-    }
+function worldToLocalCoords(pos) {
+    const x = (pos.x / level.size) * mapCanvas.width;
+    const y = (pos.y / level.size) * mapCanvas.height;
+
+    return {x: x, y: y};
+}
+
+function lineLength(pos1, pos2) {
+    return Math.sqrt((pos2.x - pos1.x) ** 2 + (pos2.y - pos1.y) ** 2);
 }

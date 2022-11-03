@@ -9,8 +9,21 @@ class Level {
         this.o = 0;
         // Array of Entity Objects
         this.things = [];
+
         // Array of Wall Objects
-        this.walls = []; 
+        //this.walls = [];
+
+        // Boundaries
+        this.bounds = [];
+
+        // Size is total size of playable area
+        this.size = 1000;
+    }
+
+    addBounds(startPos, endPos) {
+        this.bounds.push(
+            new Boundary(startPos[0], startPos[1], endPos[0], endPos[1])      
+        );
     }
 
     // Set Start Position
@@ -25,7 +38,7 @@ class Level {
     }
 
     // Add wall function
-    addWall(wall) {
+    /* addWall(wall) {
         this.walls.push(wall);
-    }
+    } */
 }

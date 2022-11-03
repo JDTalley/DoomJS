@@ -9,17 +9,24 @@
         <div class="wrapper">
             <header>
                 <h1>DoomJS</h1>
+                <div class="wrapper">
+                    <h3>Fight your way through hell!</h3>
+                    <p>Use the Arrow Keys or WASD.</p>
+                </div>
             </header>
             <canvas id="game-canvas" width="960" height="600">
                 Please use a modern browser to access this website.
             </canvas>
-            <div class="wrapper">
-                <h3>Fight your way through hell!</h3>
-                <p>Use the Arrow Keys or WASD.</p>
-            </div>
+            <canvas id="map-canvas" width="500" height="500">
+                Please use a modern browser to access this website.
+            </canvas>
         </div>
-        <script src="./js/views/canvas.js"></script>
+        <script src="./js/views/UICanvas.js"></script>
+        <script src="./js/views/MapCanvas.js"></script>
+        <script src="./js/models/raycasting/Boundary.js"></script>
+        <script src="./js/models/raycasting/Ray.js"></script>
         <script src="./js/models/entity.js"></script>
+        <script src="js/models/player.js"></script>
         <script src="./js/models/wall.js"></script>
         <script src="./js/models/level.js"></script>
         <script src="./js/models/levels/level1.js"></script>

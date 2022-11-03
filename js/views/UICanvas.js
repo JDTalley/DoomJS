@@ -1,21 +1,23 @@
-function Canvas(id) {
-    this.canvas = document.getElementById(id);
-    this.context = this.canvas.getContext('2d');
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
-    this.imgArr = [];  
+class UICanvas {
+    constructor(id) {
+        this.canvas = document.getElementById(id);
+        this.context = this.canvas.getContext('2d');
+        this.width = this.canvas.width;
+        this.height = this.canvas.height;
+        this.imgArr = []; 
+    }
 
-    this.setBackground = function(color) {
+    setBackground(color) {
         this.context.fillStyle = color;
         this.context.fillRect(0, 0, this.width, this.height);
     }
 
-    this.loadImages = function() {
+    loadImages() {
         this.numImages = 2;
         this.imgLoaded = 0;
         // Img Vars
-        var hudBack = new Image();
-        var pist = new Image();
+        let hudBack = new Image();
+        let pist = new Image();
         hudBack.onload = function() {
 
         };
@@ -31,7 +33,7 @@ function Canvas(id) {
         this.imgArr.push(pist);
     }
 
-    this.drawTestGrid = function() {
+    drawTestGrid() {
         this.context.save();
         this.context.strokeStyle = '#ff0000';
         this.context.beginPath();
@@ -45,23 +47,15 @@ function Canvas(id) {
         this.context.restore();
     }
 
-    this.drawWall = function(wall) {
-        
-    }
-
-    this.drawEnemy = function() {
-        console.log('Enemy');
-    }
-
-    this.drawGun = function(i) {
+    drawGun(i) {
         this.context.save();
         this.context.drawImage(this.imgArr[i+1], (this.width/2)-90, 350, 150, 150);
         this.context.restore();
     }
 
-    this.drawHUD = function(ammo, health, gunIndex, armor, ammoArray) {
+    drawHUD(ammo, health, gunIndex, armor, ammoArray) {
         // Create Gradients
-        var hudMedGradient = this.context.createLinearGradient(0, 575, 0, 600);
+        let hudMedGradient = this.context.createLinearGradient(0, 575, 0, 600);
         hudMedGradient.addColorStop(0, '#696969');
         hudMedGradient.addColorStop(.5, '#A9A9A9');
 
